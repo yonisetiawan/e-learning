@@ -11,7 +11,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://localhost/quotes')
+mongoose.connect('mongodb://localhost/elearning')
 var app = express();
 
 // view engine setup

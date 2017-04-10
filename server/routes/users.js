@@ -11,10 +11,10 @@ router.get('/getAll', function(req, res, next) {
   })
 });
 
-router.post('/addData', function(req, res, next) {
+router.post('/addUser', function(req, res, next) {
   const addData = new modelsUser({
-    email: req.body.name,
-    password: passwordHash.generate(req.body.linkurl),
+    email: req.body.email,
+    password: passwordHash.generate(req.body.password),
     level: req.body.level
   })
   addData.save(function(err, result) {
@@ -31,7 +31,7 @@ router.delete('/delete',function(req, res, next) {
 
 router.post('/login', function(req, res, next) {
   modelsUser.find({
-    where: req.body.email
+      email: req.body.email
   }).then(function(result) {
     if(result.length>0){
       if(passwordHash.verify(req.body.password, result[0].password)){
@@ -45,16 +45,20 @@ router.post('/login', function(req, res, next) {
             status: true
           })
       }else{
-        res.send(false)
+        res.send({
+          status: false
+        })
       }
     }else{
-      res.send(false)
+      res.send({
+        status: false
+      })
     }
   })
 
 })
 
-rotuer.post('/decode', function(req, res, next) {
+router.post('/decode', function(req, res, next) {
   jwt.verify(req.body.token, "CODEuntukDECODE", function(err, result) {
     if(err) res.send(err)
     else res.send(result)
