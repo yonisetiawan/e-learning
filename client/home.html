@@ -9,6 +9,7 @@
     <meta name="author" content="">
     <title>ELearning</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
     <link href="cssfile/home.css" rel="stylesheet">
 </head>
 
@@ -34,7 +35,7 @@
                       </div>
                       <div class="form-group">
                           <input class="btn btn-warning" style="width:100%" onclick="uploadImages()" readonly="readonly" value="Upload File" name="uploadimg" id="uploadimg">
-                          <input type="hidden" id="imageURL">
+                          <input id="imageURL">
                       </div>
                         <input readonly="readonly" onclick="addProducts()" class="btn btn-info" style="width:100%" value="Submit"></input>
                   </form>
@@ -42,6 +43,24 @@
             </div>
             <div class="col-md-9">
                 <div id="products" class="row">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+
+                        <th>Nama File</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="listfile">
+                      <tr>
+                         <td>Mark</td>
+                         <td>
+                            <a type="button" href="https://drive.google.com/open?id=0BwZ2GOAiJG2BUGxDVHo1SDdVakU" target="_blank" class="btn btn-info">Download</a>
+                            <button type="button" class="btn btn-warning">Remove</button>
+                         </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
             </div>
         </div>
@@ -71,7 +90,7 @@
                 },
                 function(Blob) {
                     // document.getElementById("linkUrlImages").innerHTML = Blob.filename
-                    // linkimage(Blob.url)
+                    linkimage(Blob.url)
                     //{"url":"https://cdn.filestackcontent.com/31wQVyJ2REaSzZv9SkJu","filename":"images.jpg","mimetype":"image/jpeg","size":9493,"id":1,"client":"computer","isWriteable":true}
                 },
                 function(FPError) {
@@ -81,27 +100,25 @@
         function linkimage(inputlinkimage) {
             $("#imageURL").val(inputlinkimage)
         }
-        function validateAddProducts() {
-            if ($("#namefile").val() == "" || $("#imageURL").val() == "") {
-                alert("Lengkapi Form Add Products");
+        function validateAddData() {
+            if ($("#namefile").val() === "" || $("#imageURL").val() === "") {
+                swal("Warning", "Cek Input Name or Input File")
                 return false;
             } else {
                 return true;
             }
         }
         function addProducts() {
-            if (validateAddProducts()) {
+            if (validateAddData()) {
                 $.ajax({
-                    url: "http://localhost:3000/api/products/addProducts",
+                    url: "http://localhost:3000/api/addData",
                     type: "POST",
                     data: {
-
                         name: $("#namefile").val(),
-                        fileurl: $("#imageURL").val(),
+                        linkurl: $("#imageURL").val(),
                     },
                     success: function(result) {
-                        alert("Create New Proucts Success")
-
+                        swal("Success", "File Berhasil ditambahkan")
                         $("#namefile").val('')
                         $("#imageURL").val('')
                     }
